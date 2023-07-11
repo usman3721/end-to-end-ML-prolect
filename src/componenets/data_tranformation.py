@@ -31,8 +31,14 @@ class DataTransformation:
         This function is responsible for data transformation
         '''
         try:
-            numerical_features=['symboling', 'wheelbase', 'carlength', 'carwidth', 'carheight', 'curbweight', 'enginesize', 'boreratio', 'stroke', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
-            categorical_features=['CarName', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel', 'enginelocation', 'enginetype', 'cylindernumber', 'fuelsystem']
+            numerical_columns = ["writing score", "reading score"]
+            categorical_columns = [
+                "gender",
+                "race/ethnicity",
+                "parental level of education",
+                "lunch",
+                "test preparation course",
+            ]
             
             
             num_pipeline=Pipeline(
@@ -49,15 +55,15 @@ class DataTransformation:
                 ]
             )
             
-            logging.info(f"Numerical columns {numerical_features}")
-            logging.info(f"Categorical  columns {categorical_features}")
+            logging.info(f"Numerical columns {numerical_columns}")
+            logging.info(f"Categorical  columns {categorical_columns}")
             
             
             
             preprocessor=ColumnTransformer(
             [
-                ('num_pipeline',num_pipeline,numerical_features),
-                ('cat_pipeline',cat_pipeline,categorical_features)
+                ('num_pipeline',num_pipeline,numerical_columns),
+                ('cat_pipeline',cat_pipeline,categorical_columns)
             ]
             )
             
@@ -82,8 +88,9 @@ class DataTransformation:
             
             preprocessor_obj=self.get_data_transformer_object()
             
-            target_column_name='price'
-            numerical_features=['symboling', 'wheelbase', 'carlength', 'carwidth', 'carheight', 'curbweight', 'enginesize', 'boreratio', 'stroke', 'compressionratio', 'horsepower', 'peakrpm', 'citympg', 'highwaympg']
+         
+            target_column_name="math score"
+            numerical_columns = ["writing score", "reading score"]
             
             
             input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
@@ -98,15 +105,11 @@ class DataTransformation:
             input_feature_test_arr=preprocessor_obj.transform(input_feature_test_df)
             
             
-            print(f"This is the input_feature_train_df \n {input_feature_train_df}")            
-            print(f"This is the  target_feature_train_df \n {target_feature_train_df}")            
+           
+            train_arr = np.c_[
+                input_feature_train_arr, np.array(target_feature_train_df)]
             
-            
-            train_arr=np.c_[
-               input_feature_train_arr,target_feature_train_df.reshape(1,164)]
-            
-            test_arr=np.c_[
-                input_feature_test_arr,target_feature_test_df.reshape(1,41)]
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
 
 

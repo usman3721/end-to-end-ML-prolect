@@ -6,6 +6,8 @@ import pandas as pd
 from src.componenets.data_tranformation import DataTransformation
 from src.componenets.data_tranformation import DataTransformationConfig
 
+from src.componenets.model_trainer import ModelTrainingConfig
+from src.componenets.model_trainer import ModelTrainer
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
@@ -24,7 +26,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df=pd.read_csv('notebook\data\CarPrice_Assignment.csv')
+            df=pd.read_csv('notebook\data\exams.csv')
             
             logging.info("Read the dataset as dataframe")
             
@@ -53,6 +55,7 @@ if __name__=="__main__":
     
     
     data_transformation=DataTransformation()
-    data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
     
-
+    model_trainer=ModelTrainer()
+    print(model_trainer.initiate_model_trainer(train_arr,test_arr))
